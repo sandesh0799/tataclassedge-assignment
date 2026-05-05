@@ -1,20 +1,16 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import ApexCharts, { ApexOptions } from 'apexcharts';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 import { AuthService } from '../../core/auth.service';
 import { InvoiceStore } from '../../core/invoice.store';
 
-/**
- * ApexCharts attaches SVG into the DOM. If we destroy + create too fast (or overlap async destroys),
- * you can briefly see duplicated charts. This component uses ONE debounced redraw and clears host nodes.
- */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CurrencyPipe, MatCardModule, MatProgressBarModule],
+  imports: [CurrencyPipe, MatCardModule, NgxSkeletonLoaderModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,7 +24,6 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
 
   private charts: ApexCharts[] = [];
 
-  /** After this is true + not loading, chart hosts exist in the DOM (@if (!isLoading())). */
   private readonly viewChartsReady = signal(false);
 
   private rafRedraw = 0;
@@ -133,7 +128,6 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     void this.disposeCharts();
   }
 
-  /** Runs at most once per animation frame — avoids stacking multiple Apex renders */
   private scheduleRedrawCharts(): void {
     cancelAnimationFrame(this.rafRedraw);
     this.rafRedraw = requestAnimationFrame(() => {
@@ -185,8 +179,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     legend: { labels: { colors: 'rgba(0,0,0,0.60)' } },
     tooltip: { theme: 'light' }
   };
-
-  /** Smaller viewports: shorter charts + legend below so labels are readable. */
+  
   private readonly chartResponsiveXY: ApexOptions['responsive'] = [
     {
       breakpoint: 640,
@@ -236,7 +229,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
         toolbar: { show: false },
         foreColor: 'rgba(0,0,0,0.68)',
         background: 'var(--erp-surface)',
-        fontFamily: 'Roboto, system-ui, sans-serif'
+        fontFamily: 'Inter, system-ui, sans-serif'
       },
       series: [{ name: 'Spending', data }],
       xaxis: { categories },
@@ -267,7 +260,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
         toolbar: { show: false },
         foreColor: 'rgba(0,0,0,0.68)',
         background: 'var(--erp-surface)',
-        fontFamily: 'Roboto, system-ui, sans-serif'
+        fontFamily: 'Inter, system-ui, sans-serif'
       },
       series: [
         { name: 'Completed invoices', data: s.completed },
@@ -304,7 +297,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
             stacked: false,
             foreColor: 'rgba(0,0,0,0.68)',
             background: 'var(--erp-surface)',
-            fontFamily: 'Roboto, system-ui, sans-serif'
+            fontFamily: 'Inter, system-ui, sans-serif'
           },
           series,
           xaxis: { categories: trend.map((m) => m.month) },
@@ -326,7 +319,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
           height: 280,
           foreColor: 'rgba(0,0,0,0.68)',
           background: 'var(--erp-surface)',
-          fontFamily: 'Roboto, system-ui, sans-serif'
+          fontFamily: 'Inter, system-ui, sans-serif'
         },
         series: [kpis.paid, kpis.unpaid, kpis.overdue],
         labels: ['Paid', 'Unpaid', 'Overdue'],
@@ -349,7 +342,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
             toolbar: { show: false },
             foreColor: 'rgba(0,0,0,0.68)',
             background: 'var(--erp-surface)',
-            fontFamily: 'Roboto, system-ui, sans-serif'
+            fontFamily: 'Inter, system-ui, sans-serif'
           },
           series: [{ name: 'Invoice total', data: rows.map((r) => Math.round(r[1])) }],
           xaxis: { categories: rows.map(([name]) => (name.length > 16 ? `${name.slice(0, 14)}...` : name)) },

@@ -1,8 +1,9 @@
 <div class="page-shell">
   <h1 class="mat-headline-medium">{{ auth.role() === 'Customer' ? 'My purchases' : 'Invoices' }}</h1>
-  <p class="mat-body-medium muted">Search, sort, and open invoice details.</p>
+  <p class="mat-body-medium subhead">Search, sort, and open invoice details.</p>
 
-  <div class="toolbar">
+  <mat-card class="toolbar-card" appearance="outlined">
+    <mat-card-content class="toolbar">
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-label>Status</mat-label>
       <mat-select [value]="store.listStatusFilter()" (selectionChange)="onStatusChange($event.value)">
@@ -24,10 +25,12 @@
     @if (auth.canCreateOrEditInvoices()) {
       <button mat-flat-button color="primary" type="button" (click)="createInvoice()">New invoice</button>
     }
-  </div>
+    </mat-card-content>
+  </mat-card>
 
   @if (store.isLoading()) {
-    <mat-progress-bar mode="indeterminate" />
+    <ngx-skeleton-loader count="1" [theme]="{ height: '48px', 'border-radius': '8px' }" />
+    <ngx-skeleton-loader count="5" [theme]="{ height: '42px', 'margin-top': '8px', 'border-radius': '8px' }" />
   } @else if (store.totalInvoices() === 0) {
     <mat-card>
       <mat-card-content class="empty-card">

@@ -3,10 +3,13 @@ import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 import { InvoiceStore } from '../../core/invoice.store';
 import { Invoice, InvoiceStatus, ReportFilters } from '../../models/domain.models';
@@ -21,10 +24,13 @@ import { Invoice, InvoiceStatus, ReportFilters } from '../../models/domain.model
     MatTableModule,
     MatButtonModule,
     MatCardModule,
+    MatDatepickerModule,
     MatFormFieldModule,
+    MatNativeDateModule,
     MatInputModule,
     MatSelectModule,
-    MatChipsModule
+    MatChipsModule,
+    NgxSkeletonLoaderModule
   ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',
@@ -53,9 +59,8 @@ export class ReportsComponent {
     this.patchFilters({ status });
   }
 
-  applyDate(ev: Event, key: 'fromDate' | 'toDate'): void {
-    const value = (ev.target as HTMLInputElement).value;
-    this.patchFilters({ [key]: value });
+  applyDate(ev: MatDatepickerInputEvent<Date>, key: 'fromDate' | 'toDate'): void {
+    this.patchFilters({ [key]: this.toIsoDate(ev.value ?? null) });
   }
 
   applySearch(ev: Event): void {
@@ -92,4 +97,20 @@ export class ReportsComponent {
   }
 
   protected readonly statusOptions: (InvoiceStatus | 'All')[] = ['All', 'Paid', 'Pending', 'Overdue'];
+
+  protected dateValue(value: string): Date | null {
+    if (!value) return null;
+    const parts = value.split('-').map(Number);
+    if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
+    const [year, month, day] = parts;
+    return new Date(year, month - 1, day);
+  }
+
+  private toIsoDate(value: Date | null): string {
+    if (!value || Number.isNaN(value.getTime())) return '';
+    const year = value.getFullYear();
+    const month = `${value.getMonth() + 1}`.padStart(2, '0');
+    const day = `${value.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 }

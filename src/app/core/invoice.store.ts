@@ -6,7 +6,6 @@ import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
 import { NotificationService } from './notification.service';
 
-/** Single source of truth for invoices + list/report filters; KPIs and paged lists are derived with `computed`. */
 @Injectable({ providedIn: 'root' })
 export class InvoiceStore {
   private readonly invoices = signal<Invoice[]>([]);
@@ -29,7 +28,6 @@ export class InvoiceStore {
     return data.filter((i) => i.customerId === user.customerId);
   });
 
-  /** KPI card "Unpaid" uses invoices in `Pending` status (not yet paid). */
   readonly kpis = computed(() => {
     const scoped = this.scopedInvoices();
     return {
@@ -57,14 +55,12 @@ export class InvoiceStore {
       }));
   });
 
-  /** Invoice list: scoped + status column filter + sort (not report filters). */
   readonly listFilteredInvoices = computed(() => {
     let list = [...this.scopedInvoices()];
     if (this.statusFilter() !== 'All') list = list.filter((i) => i.status === this.statusFilter());
     return this.sortInvoiceList(list);
   });
 
-  /** Reports view: scoped + report panel filters. */
   readonly reportFilteredInvoices = computed(() => {
     let list = [...this.scopedInvoices()];
     const reportFilter = this.reportFilters();
@@ -119,10 +115,13 @@ export class InvoiceStore {
     private readonly auth: AuthService,
     private readonly notify: NotificationService
   ) {
-    effect(() => {
-      this.auth.role();
-      this.pageIndex.set(0);
-    });
+    effect(
+      () => {
+        this.auth.role();
+        this.pageIndex.set(0);
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   loadInvoices(): void {

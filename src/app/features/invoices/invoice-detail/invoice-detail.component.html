@@ -1,6 +1,6 @@
 <div class="page-shell">
   @if (invoice(); as inv) {
-    <mat-card>
+    <mat-card appearance="outlined" class="detail-card">
       <mat-card-content>
         <div class="actions-row">
           <a mat-button routerLink="/invoices">← Invoice list</a>
@@ -30,7 +30,7 @@
           <div><span class="amt-label">Grand total</span><div class="amt-val grand">{{ inv.grandTotal | currency: inv.currency }}</div></div>
         </div>
 
-        <h3 class="mat-title">Line items</h3>
+        <h3 class="mat-title-medium lines-heading">Line items</h3>
         @for (item of inv.items; track trackLineItem($index, item); let last = $last) {
           <div class="line-row">
             <span>{{ item.description }}</span>
@@ -44,8 +44,11 @@
       </mat-card-content>
     </mat-card>
   } @else if (!store.isLoading()) {
-    <mat-card><mat-card-content class="empty">Invoice not available for your role or it may have been removed.</mat-card-content></mat-card>
+    <mat-card appearance="outlined">
+      <mat-card-content class="empty">Invoice not available for your role or it may have been removed.</mat-card-content>
+    </mat-card>
   } @else {
-    <mat-progress-bar mode="indeterminate" />
+    <ngx-skeleton-loader count="1" [theme]="{ height: '48px', 'border-radius': '8px', 'margin-bottom': '12px' }" />
+    <ngx-skeleton-loader count="1" [theme]="{ height: '220px', 'border-radius': '12px' }" />
   }
 </div>

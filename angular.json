@@ -35,7 +35,7 @@
             ],
             "styles": [
               "node_modules/ngx-toastr/toastr.css",
-              "node_modules/@angular/material/prebuilt-themes/azure-blue.css",
+              "src/erp-theme.scss",
               "src/styles.scss"
             ],
             "scripts": []
@@ -96,7 +96,7 @@
             ],
             "styles": [
               "node_modules/ngx-toastr/toastr.css",
-              "node_modules/@angular/material/prebuilt-themes/azure-blue.css",
+              "src/erp-theme.scss",
               "src/styles.scss"
             ],
             "scripts": []

@@ -5,14 +5,16 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { map } from 'rxjs';
 
-import { AuthService } from '../../core/auth.service';
-import { InvoiceStore } from '../../core/invoice.store';
-import { Invoice, InvoiceStatus } from '../../models/domain.models';
+import { AuthService } from '../../../core/auth.service';
+import { InvoiceStore } from '../../../core/invoice.store';
+import { Invoice, InvoiceStatus } from '../../../models/domain.models';
 
 @Component({
   selector: 'app-invoice-form',
@@ -22,6 +24,8 @@ import { Invoice, InvoiceStatus } from '../../models/domain.models';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatSelectModule,
     MatButtonModule,
     MatDividerModule
@@ -44,8 +48,8 @@ export class InvoiceFormComponent {
     id: ['', Validators.required],
     customerId: ['', Validators.required],
     customerName: ['', Validators.required],
-    date: ['', Validators.required],
-    dueDate: ['', Validators.required],
+    date: [null as Date | null, Validators.required],
+    dueDate: [null as Date | null, Validators.required],
     status: ['Pending', Validators.required],
     currency: ['USD', Validators.required],
     items: this.fb.array([this.createItemGroup()])
@@ -113,8 +117,8 @@ export class InvoiceFormComponent {
       id: payload.id ?? '',
       customerId: payload.customerId ?? '',
       customerName: payload.customerName ?? '',
-      date: payload.date ?? '',
-      dueDate: payload.dueDate ?? '',
+      date: this.toIsoDate(payload.date),
+      dueDate: this.toIsoDate(payload.dueDate),
       status: (payload.status ?? 'Pending') as InvoiceStatus,
       currency: payload.currency ?? 'USD',
       vendorId,
@@ -132,7 +136,7 @@ export class InvoiceFormComponent {
     this.router.navigate(['/invoices']);
   }
 
-  /** Stable row keys for `@for`; indices match `FormArray` order. */
+
   protected trackLine(i: number): number {
     return i;
   }
@@ -142,8 +146,8 @@ export class InvoiceFormComponent {
       id: inv.id,
       customerId: inv.customerId,
       customerName: inv.customerName,
-      date: inv.date,
-      dueDate: inv.dueDate,
+      date: this.fromIsoDate(inv.date),
+      dueDate: this.fromIsoDate(inv.dueDate),
       status: inv.status,
       currency: inv.currency
     });
@@ -166,8 +170,8 @@ export class InvoiceFormComponent {
       id: '',
       customerId: '',
       customerName: '',
-      date: '',
-      dueDate: '',
+      date: null,
+      dueDate: null,
       status: 'Pending',
       currency: 'USD'
     });
@@ -182,5 +186,21 @@ export class InvoiceFormComponent {
       unitPrice: [0, [Validators.required, Validators.min(0)]],
       taxRate: [0.1, [Validators.required, Validators.min(0)]]
     });
+  }
+
+  private fromIsoDate(value: string): Date | null {
+    if (!value) return null;
+    const parts = value.split('-').map(Number);
+    if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
+    const [year, month, day] = parts;
+    return new Date(year, month - 1, day);
+  }
+
+  private toIsoDate(value: unknown): string {
+    if (!(value instanceof Date) || Number.isNaN(value.getTime())) return '';
+    const year = value.getFullYear();
+    const month = `${value.getMonth() + 1}`.padStart(2, '0');
+    const day = `${value.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

@@ -6,17 +6,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { map } from 'rxjs';
 
-import { AuthService } from '../../core/auth.service';
-import { InvoiceStore } from '../../core/invoice.store';
-import { InvoiceItem } from '../../models/domain.models';
+import { AuthService } from '../../../core/auth.service';
+import { InvoiceStore } from '../../../core/invoice.store';
+import { InvoiceItem } from '../../../models/domain.models';
 
 @Component({
   selector: 'app-invoice-detail',
   standalone: true,
-  imports: [DatePipe, CurrencyPipe, RouterLink, MatCardModule, MatButtonModule, MatChipsModule, MatDividerModule, MatProgressBarModule],
+  imports: [DatePipe, CurrencyPipe, RouterLink, MatCardModule, MatButtonModule, MatChipsModule, MatDividerModule, NgxSkeletonLoaderModule],
   templateUrl: './invoice-detail.component.html',
   styleUrl: './invoice-detail.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 
 import { roleGuard } from '../../core/role.guard';
-import { InvoiceDetailComponent } from './invoice-detail.component';
-import { InvoiceFormComponent } from './invoice-form.component';
+import { InvoiceDetailComponent } from './invoice-detail/invoice-detail.component';
+import { InvoiceFormComponent } from './invoice-form/invoice-form.component';
 import { InvoicesComponent } from './invoices.component';
 
 export const INVOICES_ROUTES: Routes = [

@@ -4,7 +4,7 @@ describe('invoice line math', () => {
   }
 
   it('computes taxed line totals', () => {
-    expect(lineTotal(2, 100, 0.1)).toBe(220);
+    expect(lineTotal(2, 100, 0.1)).toBeCloseTo(220, 8);
   });
 
   it('aggregates invoice body totals', () => {

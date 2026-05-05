@@ -6,9 +6,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 import { AuthService } from '../../core/auth.service';
 import { InvoiceStore } from '../../core/invoice.store';
@@ -25,9 +25,9 @@ import { InvoiceStatus } from '../../models/domain.models';
     MatButtonModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatProgressBarModule,
     MatCardModule,
-    MatChipsModule
+    MatChipsModule,
+    NgxSkeletonLoaderModule
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss',

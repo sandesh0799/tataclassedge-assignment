@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,13 +44,6 @@ export class ShellComponent implements OnInit {
       .pipe(map((state) => state.matches)),
     { initialValue: false }
   );
-
-  protected readonly avatarUrl = computed(() => {
-    const u = this.auth.currentUser();
-    if (u?.avatar) return u.avatar;
-    const seed = encodeURIComponent(u?.name ?? 'user');
-    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
-  });
 
   private readonly api = inject(ApiService);
   private readonly invoiceStore = inject(InvoiceStore);

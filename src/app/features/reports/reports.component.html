@@ -1,29 +1,36 @@
 <div class="page-shell">
   <h1 class="mat-headline-medium">Reports</h1>
-  <p class="mat-body-medium muted">Filter the scoped dataset and export for stakeholders.</p>
+  <p class="mat-body-medium subhead">Filter the scoped dataset and export for stakeholders.</p>
 
-  <mat-card class="filters-card">
+  <mat-card class="filters-card" appearance="outlined">
     <mat-card-content>
       <div class="filters">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Date from</mat-label>
-          <input matInput type="date" [value]="store.reportFilters().fromDate" (change)="applyDate($event, 'fromDate')" />
+          <input matInput [matDatepicker]="fromPicker" [value]="dateValue(store.reportFilters().fromDate)"
+            (dateChange)="applyDate($event, 'fromDate')" />
+          <mat-datepicker-toggle matIconSuffix [for]="fromPicker" />
+          <mat-datepicker #fromPicker />
         </mat-form-field>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Date to</mat-label>
-          <input matInput type="date" [value]="store.reportFilters().toDate" (change)="applyDate($event, 'toDate')" />
+          <input matInput [matDatepicker]="toPicker" [value]="dateValue(store.reportFilters().toDate)"
+            (dateChange)="applyDate($event, 'toDate')" />
+          <mat-datepicker-toggle matIconSuffix [for]="toPicker" />
+          <mat-datepicker #toPicker />
         </mat-form-field>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Status</mat-label>
           <mat-select [value]="store.reportFilters().status" (selectionChange)="setReportStatus($event.value)">
             @for (st of statusOptions; track st) {
-              <mat-option [value]="st">{{ st === 'All' ? 'All status' : st }}</mat-option>
+            <mat-option [value]="st">{{ st === 'All' ? 'All status' : st }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grow">
           <mat-label>Client / vendor</mat-label>
-          <input matInput type="search" placeholder="Name or vendor id" [value]="store.reportFilters().clientOrVendor" (input)="applySearch($event)" />
+          <input matInput type="search" placeholder="Name or vendor id" [value]="store.reportFilters().clientOrVendor"
+            (input)="applySearch($event)" />
         </mat-form-field>
         <div class="export-actions">
           <button mat-flat-button color="primary" type="button" (click)="exportCSV()">Export CSV</button>
@@ -33,57 +40,80 @@
     </mat-card-content>
   </mat-card>
 
+  @if (store.isLoading()) {
+  <ngx-skeleton-loader count="2" [theme]="{ height: '88px', 'margin-bottom': '12px', 'border-radius': '10px' }" />
+  <ngx-skeleton-loader count="5" [theme]="{ height: '42px', 'margin-top': '8px', 'border-radius': '8px' }" />
+  } @else {
   <div class="summary-grid">
-    <mat-card><mat-card-content><div class="sum-label">Total billed</div><div class="sum-val">{{ store.reportSummary().total | currency: 'USD' }}</div></mat-card-content></mat-card>
-    <mat-card><mat-card-content><div class="sum-label">Paid</div><div class="sum-val">{{ store.reportSummary().paid | currency: 'USD' }}</div></mat-card-content></mat-card>
-    <mat-card><mat-card-content><div class="sum-label">Pending</div><div class="sum-val">{{ store.reportSummary().pending | currency: 'USD' }}</div></mat-card-content></mat-card>
-    <mat-card><mat-card-content><div class="sum-label">Overdue</div><div class="sum-val">{{ store.reportSummary().overdue | currency: 'USD' }}</div></mat-card-content></mat-card>
-    <mat-card><mat-card-content><div class="sum-label">Collection rate</div><div class="sum-val">{{ store.reportSummary().collectionRate | number: '1.1-1' }}%</div></mat-card-content></mat-card>
-    <mat-card><mat-card-content><div class="sum-label">Period growth</div><div class="sum-val">{{ store.reportSummary().periodGrowth | number: '1.1-1' }}%</div></mat-card-content></mat-card>
+    <mat-card><mat-card-content>
+        <div class="sum-label">Total billed</div>
+        <div class="sum-val">{{ store.reportSummary().total | currency: 'USD' }}</div>
+      </mat-card-content></mat-card>
+    <mat-card><mat-card-content>
+        <div class="sum-label">Paid</div>
+        <div class="sum-val">{{ store.reportSummary().paid | currency: 'USD' }}</div>
+      </mat-card-content></mat-card>
+    <mat-card><mat-card-content>
+        <div class="sum-label">Pending</div>
+        <div class="sum-val">{{ store.reportSummary().pending | currency: 'USD' }}</div>
+      </mat-card-content></mat-card>
+    <mat-card><mat-card-content>
+        <div class="sum-label">Overdue</div>
+        <div class="sum-val">{{ store.reportSummary().overdue | currency: 'USD' }}</div>
+      </mat-card-content></mat-card>
+    <mat-card><mat-card-content>
+        <div class="sum-label">Collection rate</div>
+        <div class="sum-val">{{ store.reportSummary().collectionRate | number: '1.1-1' }}%</div>
+      </mat-card-content></mat-card>
+    <mat-card><mat-card-content>
+        <div class="sum-label">Period growth</div>
+        <div class="sum-val">{{ store.reportSummary().periodGrowth | number: '1.1-1' }}%</div>
+      </mat-card-content></mat-card>
   </div>
 
   @if (store.reportFilteredInvoices().length === 0) {
-    <mat-card><mat-card-content class="empty">No rows match your filters.</mat-card-content></mat-card>
+  <mat-card><mat-card-content class="empty">No rows match your filters.</mat-card-content></mat-card>
   } @else {
-    <div class="table-scroll mat-elevation-z2">
-      <table mat-table [dataSource]="store.reportFilteredInvoices()">
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>Invoice ID</th>
-          <td mat-cell *matCellDef="let row" class="mono">{{ row.id }}</td>
-        </ng-container>
+  <div class="table-scroll mat-elevation-z2">
+    <table mat-table [dataSource]="store.reportFilteredInvoices()">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Invoice ID</th>
+        <td mat-cell *matCellDef="let row" class="mono">{{ row.id }}</td>
+      </ng-container>
 
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>Date</th>
-          <td mat-cell *matCellDef="let row">{{ row.date | date: 'yyyy-MM-dd' }}</td>
-        </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let row">{{ row.date | date: 'yyyy-MM-dd' }}</td>
+      </ng-container>
 
-        <ng-container matColumnDef="customer">
-          <th mat-header-cell *matHeaderCellDef>Customer</th>
-          <td mat-cell *matCellDef="let row">{{ row.customerName }}</td>
-        </ng-container>
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>Customer</th>
+        <td mat-cell *matCellDef="let row">{{ row.customerName }}</td>
+      </ng-container>
 
-        <ng-container matColumnDef="vendor">
-          <th mat-header-cell *matHeaderCellDef>Vendor</th>
-          <td mat-cell *matCellDef="let row">{{ vendorLabel(row.vendorId) }}</td>
-        </ng-container>
+      <ng-container matColumnDef="vendor">
+        <th mat-header-cell *matHeaderCellDef>Vendor</th>
+        <td mat-cell *matCellDef="let row">{{ vendorLabel(row.vendorId) }}</td>
+      </ng-container>
 
-        <ng-container matColumnDef="total">
-          <th mat-header-cell *matHeaderCellDef class="num">Total</th>
-          <td mat-cell *matCellDef="let row" class="num">{{ row.grandTotal | currency: row.currency }}</td>
-        </ng-container>
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef class="num">Total</th>
+        <td mat-cell *matCellDef="let row" class="num">{{ row.grandTotal | currency: row.currency }}</td>
+      </ng-container>
 
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let row">
-            <mat-chip-set aria-label="Status">
-              <mat-chip [color]="statusTone(row.status)" highlighted>{{ row.status }}</mat-chip>
-            </mat-chip-set>
-          </td>
-        </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-chip-set aria-label="Status">
+            <mat-chip [color]="statusTone(row.status)" highlighted>{{ row.status }}</mat-chip>
+          </mat-chip-set>
+        </td>
+      </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-    </div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  }
   }
 </div>

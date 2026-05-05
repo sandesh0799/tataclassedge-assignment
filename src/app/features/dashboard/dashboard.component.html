@@ -1,6 +1,6 @@
 <div class="page-shell">
   <h1 class="mat-headline-medium">{{ pageTitle() }}</h1>
-  <p class="mat-body-medium muted-text">
+  <p class="mat-body-medium subhead">
     @switch (auth.role()) {
       @case ('Customer') {
         Track what you have spent and what is still outstanding.
@@ -15,12 +15,16 @@
   </p>
 
   @if (store.isLoading()) {
-    <mat-progress-bar mode="indeterminate" />
+    <div class="skeleton-grid">
+      <ngx-skeleton-loader count="1" [theme]="{ height: '120px', 'border-radius': '12px' }" />
+      <ngx-skeleton-loader count="1" [theme]="{ height: '120px', 'border-radius': '12px' }" />
+      <ngx-skeleton-loader count="1" [theme]="{ height: '280px', 'border-radius': '12px' }" />
+    </div>
   } @else {
     @switch (auth.role()) {
       @case ('Customer') {
         <div class="kpi-grid">
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title>Recent purchases</mat-card-title>
               <mat-card-subtitle>Paid invoices total</mat-card-subtitle>
@@ -29,7 +33,7 @@
               <p class="mat-headline-small kpi-value">{{ customerMetrics().recentPurchases | currency: 'USD' }}</p>
             </mat-card-content>
           </mat-card>
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title>Current balance</mat-card-title>
               <mat-card-subtitle>Pending + overdue</mat-card-subtitle>
@@ -39,11 +43,11 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <mat-card class="chart-panel">
+        <mat-card class="chart-panel" appearance="outlined">
           <mat-card-header><mat-card-title>Monthly spending</mat-card-title></mat-card-header>
           <mat-card-content>
             @if (customerSpendSeries().categories.length === 0) {
-              <p class="muted-text mat-body-medium">No purchase history yet.</p>
+              <p class="subhead mat-body-medium">No purchase history yet.</p>
             } @else {
               <div #customerLineHost class="chart-host"></div>
             }
@@ -52,7 +56,7 @@
       }
       @case ('Vendor') {
         <div class="kpi-grid">
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title>Total earnings</mat-card-title>
               <mat-card-subtitle>Paid invoices</mat-card-subtitle>
@@ -61,7 +65,7 @@
               <p class="mat-headline-small kpi-value">{{ vendorMetrics().totalEarnings | currency: 'USD' }}</p>
             </mat-card-content>
           </mat-card>
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title>Pending payouts</mat-card-title>
               <mat-card-subtitle>Pending status</mat-card-subtitle>
@@ -71,14 +75,14 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <mat-card class="chart-panel">
+        <mat-card class="chart-panel" appearance="outlined">
           <mat-card-header>
             <mat-card-title>Client status</mat-card-title>
             <mat-card-subtitle>Last periods</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             @if (vendorStackedSeries().categories.length === 0) {
-              <p class="muted-text mat-body-medium">No invoice history yet.</p>
+              <p class="subhead mat-body-medium">No invoice history yet.</p>
             } @else {
               <div #vendorStackHost class="chart-host"></div>
             }
@@ -87,13 +91,13 @@
       }
       @default {
         <div class="kpi-grid kpi-grid--3">
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header><mat-card-title>Paid</mat-card-title></mat-card-header>
             <mat-card-content>
               <p class="mat-headline-small kpi-value">{{ kpis().paid | currency: 'USD' }}</p>
             </mat-card-content>
           </mat-card>
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title>Unpaid</mat-card-title>
               <mat-card-subtitle>Pending invoices</mat-card-subtitle>
@@ -102,7 +106,7 @@
               <p class="mat-headline-small kpi-value">{{ kpis().unpaid | currency: 'USD' }}</p>
             </mat-card-content>
           </mat-card>
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header><mat-card-title>Overdue</mat-card-title></mat-card-header>
             <mat-card-content>
               <p class="mat-headline-small kpi-value">{{ kpis().overdue | currency: 'USD' }}</p>
@@ -110,17 +114,17 @@
           </mat-card>
         </div>
         <div class="chart-grid">
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header><mat-card-title>Monthly trends (Paid / Unpaid / Overdue)</mat-card-title></mat-card-header>
             <mat-card-content>
               @if (store.monthlyTrend().length === 0) {
-                <p class="muted-text mat-body-medium">No data.</p>
+                <p class="subhead mat-body-medium">No data.</p>
               } @else {
                 <div #adminTrendHost class="chart-host"></div>
               }
             </mat-card-content>
           </mat-card>
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header><mat-card-title>Status distribution</mat-card-title></mat-card-header>
             <mat-card-content>
               <div #adminDonutHost class="chart-host chart-host--short"></div>
@@ -128,7 +132,7 @@
           </mat-card>
         </div>
         @if (topCounterparties().length) {
-          <mat-card class="chart-panel">
+          <mat-card class="chart-panel" appearance="outlined">
             <mat-card-header><mat-card-title>Top counterparties</mat-card-title></mat-card-header>
             <mat-card-content>
               <div #adminBarHost class="chart-host"></div>
