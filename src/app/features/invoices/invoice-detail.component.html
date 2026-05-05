@@ -1,0 +1,51 @@
+<div class="page-shell">
+  @if (invoice(); as inv) {
+    <mat-card>
+      <mat-card-content>
+        <div class="actions-row">
+          <a mat-button routerLink="/invoices">← Invoice list</a>
+          @if (auth.canCreateOrEditInvoices()) {
+            <a mat-stroked-button [routerLink]="['/invoices', inv.id, 'edit']">Edit invoice</a>
+          }
+          @if (auth.canDeleteInvoices()) {
+            <button mat-flat-button color="warn" type="button" (click)="deleteInvoice(inv.id)">Delete</button>
+          }
+        </div>
+
+        <h2 class="mat-headline-small title">{{ inv.id }} · {{ inv.customerName }}</h2>
+
+        <div class="meta-row">
+          <span class="mat-body-medium">Issued <strong>{{ inv.date | date: 'mediumDate' }}</strong></span>
+          <span class="mat-body-medium">Due <strong>{{ inv.dueDate | date: 'mediumDate' }}</strong></span>
+          <mat-chip-set aria-label="Status">
+            <mat-chip [color]="statusTone(inv.status)" highlighted>{{ inv.status }}</mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <mat-divider />
+
+        <div class="amounts-grid">
+          <div><span class="amt-label">Subtotal</span><div class="amt-val">{{ inv.subtotal | currency: inv.currency }}</div></div>
+          <div><span class="amt-label">Tax</span><div class="amt-val">{{ inv.taxTotal | currency: inv.currency }}</div></div>
+          <div><span class="amt-label">Grand total</span><div class="amt-val grand">{{ inv.grandTotal | currency: inv.currency }}</div></div>
+        </div>
+
+        <h3 class="mat-title">Line items</h3>
+        @for (item of inv.items; track trackLineItem($index, item); let last = $last) {
+          <div class="line-row">
+            <span>{{ item.description }}</span>
+            <span class="muted">× {{ item.quantity }}</span>
+            <span class="total">{{ item.total | currency: inv.currency }}</span>
+          </div>
+          @if (!last) {
+            <mat-divider />
+          }
+        }
+      </mat-card-content>
+    </mat-card>
+  } @else if (!store.isLoading()) {
+    <mat-card><mat-card-content class="empty">Invoice not available for your role or it may have been removed.</mat-card-content></mat-card>
+  } @else {
+    <mat-progress-bar mode="indeterminate" />
+  }
+</div>

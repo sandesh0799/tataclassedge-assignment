@@ -1,1 +1,113 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --erp-primary: #2563eb;
+  --erp-primary-dark: #1d4ed8;
+  --erp-primary-light: #dbeafe;
+  --erp-secondary: #64748b;
+  --erp-accent: #f59e0b;
+  --erp-bg: #f8fafc;
+  --erp-surface: #ffffff;
+  --erp-surface-hover: #f1f5f9;
+  --erp-border: #e2e8f0;
+  --erp-border-light: #f1f5f9;
+  --erp-text: #0f172a;
+  --erp-text-secondary: #475569;
+  --erp-text-muted: #64748b;
+  --erp-success: #10b981;
+  --erp-warning: #f59e0b;
+  --erp-error: #ef4444;
+  --erp-text-on-primary: #ffffff;
+  --erp-chart-primary: #1a7a8c;
+  --erp-chart-secondary: #ff8a65;
+  --erp-chart-tertiary: #ffb74d;
+  --erp-chart-quaternary: #e57373;
+  --erp-space-xs: 4px;
+  --erp-space-sm: 8px;
+  --erp-space-md: 16px;
+  --erp-space-lg: 24px;
+  --erp-space-xl: 32px;
+  --erp-space-2xl: 48px;
+  --erp-radius-sm: 6px;
+  --erp-radius-md: 8px;
+  --erp-radius-lg: 12px;
+  --erp-radius-xl: 16px;
+  --erp-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --erp-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --erp-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --erp-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  color: var(--erp-text);
+  background: var(--erp-bg);
+  line-height: 1.6;
+  font-size: 14px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--erp-space-xl) var(--erp-space-md);
+}
+
+@media (max-width: 768px) {
+  .page-shell {
+    padding: var(--erp-space-lg) var(--erp-space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-shell {
+    padding: var(--erp-space-md) var(--erp-space-sm);
+  }
+}
+
+:where(.mat-headline-medium) {
+  margin: 0 0 var(--erp-space-sm);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+}
+
+:where(.mat-body-medium) {
+  margin: 0;
+  line-height: 1.6;
+}
+
+:where(.mat-mdc-card) {
+  border: 1px solid var(--erp-border);
+  border-radius: var(--erp-radius-lg);
+  box-shadow: var(--erp-shadow-sm);
+  background: var(--erp-surface);
+  transition: all 0.2s ease-in-out;
+}
+
+:where(.mat-mdc-card:hover) {
+  box-shadow: var(--erp-shadow-md);
+  transform: translateY(-1px);
+}
+
+#toast-container.toast-top-right {
+  top: max(16px, env(safe-area-inset-top, 0px));
+  right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+#toast-container .ngx-toastr {
+  border-radius: var(--erp-radius-md);
+  box-shadow: var(--erp-shadow-lg);
+  font-family: inherit;
+  font-size: 14px;
+}

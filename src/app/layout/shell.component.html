@@ -1,0 +1,83 @@
+<mat-sidenav-container class="shell-container">
+  <mat-sidenav
+    [mode]="drawerMode()"
+    [opened]="drawerOpened()"
+    (openedChange)="onDrawerChange($event)"
+    position="start"
+  >
+    <mat-toolbar class="erp-drawer-head">Navigate</mat-toolbar>
+    <mat-nav-list>
+      <a
+        mat-list-item
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="onNavigate()"
+      >
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+
+      @if (auth.role() === 'Customer') {
+        <a mat-list-item routerLink="/invoices" routerLinkActive="active" (click)="onNavigate()">
+          <mat-icon matListItemIcon>shopping_cart</mat-icon>
+          <span matListItemTitle>My purchases</span>
+        </a>
+      } @else if (auth.role() === 'Vendor') {
+        <a mat-list-item routerLink="/invoices" routerLinkActive="active" (click)="onNavigate()">
+          <mat-icon matListItemIcon>receipt_long</mat-icon>
+          <span matListItemTitle>My invoices</span>
+        </a>
+        <a mat-list-item routerLink="/reports" routerLinkActive="active" (click)="onNavigate()">
+          <mat-icon matListItemIcon>bar_chart</mat-icon>
+          <span matListItemTitle>Earnings report</span>
+        </a>
+      } @else {
+        <a mat-list-item routerLink="/invoices" routerLinkActive="active" (click)="onNavigate()">
+          <mat-icon matListItemIcon>description</mat-icon>
+          <span matListItemTitle>Invoices</span>
+        </a>
+        <a mat-list-item routerLink="/reports" routerLinkActive="active" (click)="onNavigate()">
+          <mat-icon matListItemIcon>analytics</mat-icon>
+          <span matListItemTitle>Reports</span>
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-scroll">
+    <mat-toolbar class="erp-topbar">
+      @if (isMobile()) {
+        <button mat-icon-button type="button" (click)="toggleMenu()" aria-label="Open menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      <span class="brand-title">ERP Dashboard</span>
+      <span class="toolbar-spacer"></span>
+
+      <button mat-button type="button" [matMenuTriggerFor]="roleMenu" class="role-trigger">
+        Role: {{ auth.role() }}
+        <mat-icon class="role-trigger__ic">arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #roleMenu="matMenu">
+        @for (role of roles; track trackRole($index, role)) {
+          <button mat-menu-item type="button" (click)="auth.switchRole(role)">{{ role }}</button>
+        }
+      </mat-menu>
+
+      <button mat-icon-button type="button" aria-label="Notifications">
+        <mat-icon>notifications_none</mat-icon>
+      </button>
+
+      <img class="avatar" [src]="avatarUrl()" width="40" height="40" alt="" />
+      <div class="user-meta">
+        <span class="name">{{ auth.currentUser()?.name ?? '…' }}</span>
+        <span class="role">{{ auth.role() }}</span>
+      </div>
+    </mat-toolbar>
+
+    <main>
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

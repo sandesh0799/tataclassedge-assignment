@@ -1,0 +1,128 @@
+.muted {
+  color: var(--erp-text-muted);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--erp-space-md);
+  align-items: center;
+  margin-bottom: var(--erp-space-xl);
+  padding: var(--erp-space-lg);
+  background: var(--erp-surface);
+  border: 1px solid var(--erp-border);
+  border-radius: var(--erp-radius-lg);
+  box-shadow: var(--erp-shadow-sm);
+}
+
+.toolbar mat-form-field {
+  min-width: 180px;
+  flex: 1;
+}
+
+.toolbar button[mat-flat-button] {
+  border-radius: var(--erp-radius-xl);
+  padding-inline: var(--erp-space-lg);
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.toolbar button[mat-flat-button]:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--erp-shadow-md);
+}
+
+.empty-card {
+  text-align: center;
+  padding: var(--erp-space-2xl) var(--erp-space-xl);
+}
+
+.table-scroll {
+  overflow: auto;
+  border-radius: var(--erp-radius-lg);
+  border: 1px solid var(--erp-border);
+  background: var(--erp-surface);
+  box-shadow: var(--erp-shadow-sm);
+}
+
+:host ::ng-deep .mat-mdc-header-cell {
+  color: var(--erp-text-secondary);
+  font-weight: 600;
+  font-size: 14px;
+  padding: var(--erp-space-md);
+  background: var(--erp-surface-hover);
+  border-bottom: 1px solid var(--erp-border);
+}
+
+:host ::ng-deep .mat-mdc-cell {
+  padding: var(--erp-space-md);
+  border-bottom: 1px solid var(--erp-border-light);
+}
+
+.mono {
+  font-variant-numeric: tabular-nums;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+}
+
+.sort-btn {
+  min-width: auto;
+  padding-inline: var(--erp-space-sm);
+  border-radius: var(--erp-radius-xl);
+  font-weight: 500;
+  color: var(--erp-text-secondary);
+}
+
+:host ::ng-deep .mat-mdc-table .mat-mdc-row:hover {
+  background: var(--erp-primary-light);
+  transition: background-color 0.2s ease-in-out;
+}
+
+:host ::ng-deep .mat-mdc-paginator {
+  margin-top: var(--erp-space-lg);
+  border: 1px solid var(--erp-border);
+  border-radius: var(--erp-radius-lg);
+  overflow: hidden;
+  background: var(--erp-surface);
+  box-shadow: var(--erp-shadow-sm);
+}
+
+:host ::ng-deep .mat-mdc-paginator .mat-mdc-button {
+  border-radius: var(--erp-radius-md);
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--erp-space-sm);
+    padding: var(--erp-space-md);
+  }
+
+  .toolbar mat-form-field {
+    min-width: auto;
+  }
+
+  .toolbar button[mat-flat-button] {
+    width: 100%;
+    margin-top: var(--erp-space-sm);
+  }
+
+  .table-scroll {
+    border-radius: var(--erp-radius-md);
+  }
+
+  :host ::ng-deep .mat-mdc-header-cell,
+  :host ::ng-deep .mat-mdc-cell {
+    padding: var(--erp-space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-shell {
+    padding: var(--erp-space-sm);
+  }
+
+  .toolbar {
+    padding: var(--erp-space-sm);
+  }
+}

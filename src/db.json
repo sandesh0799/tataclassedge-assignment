@@ -1,0 +1,275 @@
+{
+  "users": [
+    {
+      "id": "u101",
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "role": "Admin",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin",
+      "permissions": [
+        "READ_ALL",
+        "WRITE_ALL",
+        "DELETE_ANY",
+        "VIEW_REPORTS"
+      ]
+    },
+    {
+      "id": "v202",
+      "name": "Global Vendor",
+      "email": "vendor@example.com",
+      "role": "Vendor",
+      "vendorId": "vend_001",
+      "permissions": [
+        "READ_OWN",
+        "WRITE_OWN",
+        "VIEW_OWN_REPORTS"
+      ]
+    },
+    {
+      "id": "c303",
+      "name": "Standard Customer",
+      "email": "customer@example.com",
+      "role": "Customer",
+      "customerId": "cust_101",
+      "permissions": [
+        "READ_OWN"
+      ]
+    }
+  ],
+  "invoices": [
+    {
+      "id": "INV-001",
+      "vendorId": "vend_001",
+      "customerId": "cust_101",
+      "customerName": "Alpha Corp",
+      "date": "2024-03-15",
+      "dueDate": "2024-04-15",
+      "status": "Paid",
+      "currency": "USD",
+      "items": [
+        {
+          "description": "Consulting Services",
+          "quantity": 1,
+          "unitPrice": 1200,
+          "taxRate": 0.1,
+          "total": 1320
+        }
+      ],
+      "subtotal": 1200,
+      "taxTotal": 120,
+      "grandTotal": 1320
+    },
+    {
+      "id": "INV-002",
+      "vendorId": "vend_001",
+      "customerId": "cust_102",
+      "customerName": "Beta Industries",
+      "date": "2024-04-01",
+      "dueDate": "2024-05-01",
+      "status": "Pending",
+      "currency": "USD",
+      "items": [
+        {
+          "description": "Software License",
+          "quantity": 5,
+          "unitPrice": 200,
+          "taxRate": 0.1,
+          "total": 1100
+        }
+      ],
+      "subtotal": 1000,
+      "taxTotal": 100,
+      "grandTotal": 1100
+    },
+    {
+      "id": "INV-003",
+      "vendorId": "vend_002",
+      "customerId": "cust_103",
+      "customerName": "Gamma Systems",
+      "date": "2024-04-10",
+      "dueDate": "2024-05-10",
+      "status": "Overdue",
+      "currency": "USD",
+      "items": [
+        {
+          "description": "Hardware Maintenance",
+          "quantity": 1,
+          "unitPrice": 3000,
+          "taxRate": 0.1,
+          "total": 3300
+        }
+      ],
+      "subtotal": 3000,
+      "taxTotal": 300,
+      "grandTotal": 3300
+    },
+    {
+      "id": "INV-004",
+      "vendorId": "vend_001",
+      "customerId": "cust_101",
+      "customerName": "Alpha Corp",
+      "date": "2024-04-12",
+      "dueDate": "2024-05-12",
+      "status": "Paid",
+      "currency": "USD",
+      "items": [
+        {
+          "description": "Security Audit",
+          "quantity": 1,
+          "unitPrice": 5000,
+          "taxRate": 0.1,
+          "total": 5500
+        }
+      ],
+      "subtotal": 5000,
+      "taxTotal": 500,
+      "grandTotal": 5500
+    },
+    {
+      "id": "INV-005",
+      "vendorId": "vend_003",
+      "customerId": "cust_104",
+      "customerName": "Delta Logistics",
+      "date": "2024-04-15",
+      "dueDate": "2024-05-15",
+      "status": "Pending",
+      "currency": "USD",
+      "items": [
+        {
+          "description": "Technical Support",
+          "quantity": 10,
+          "unitPrice": 150,
+          "taxRate": 0.1,
+          "total": 1650
+        }
+      ],
+      "subtotal": 1500,
+      "taxTotal": 150,
+      "grandTotal": 1650
+    },
+    {
+      "id": "INV-006",
+      "vendorId": "vend_001",
+      "customerId": "cust_103",
+      "customerName": "Gamma Systems",
+      "date": "2024-04-20",
+      "dueDate": "2024-05-20",
+      "status": "Paid",
+      "currency": "USD",
+      "items": [
+        {
+          "description": "Training Workshop",
+          "quantity": 1,
+          "unitPrice": 2500,
+          "taxRate": 0.1,
+          "total": 2750
+        }
+      ],
+      "subtotal": 2500,
+      "taxTotal": 250,
+      "grandTotal": 2750
+    },
+    {
+      "id": "INV-007",
+      "vendorId": "vend_002",
+      "customerId": "cust_101",
+      "customerName": "Alpha Corp",
+      "date": "2024-04-25",
+      "dueDate": "2024-05-25",
+      "status": "Pending",
+      "currency": "USD",
+      "items": [
+        {
+          "description": "API Integration",
+          "quantity": 1,
+          "unitPrice": 4500,
+          "taxRate": 0.1,
+          "total": 4950
+        }
+      ],
+      "subtotal": 4500,
+      "taxTotal": 450,
+      "grandTotal": 4950
+    },
+    {
+      "id": "INV-008",
+      "vendorId": "vend_003",
+      "customerId": "cust_102",
+      "customerName": "Beta Industries",
+      "date": "2024-04-28",
+      "dueDate": "2024-05-28",
+      "status": "Overdue",
+      "currency": "USD",
+      "items": [
+        {
+          "description": "Database Migration",
+          "quantity": 1,
+          "unitPrice": 8000,
+          "taxRate": 0.1,
+          "total": 8800
+        }
+      ],
+      "subtotal": 8000,
+      "taxTotal": 800,
+      "grandTotal": 8800
+    }
+  ],
+  "dashboardStats": {
+    "kpis": {
+      "totalPaid": 150000,
+      "totalUnpaid": 55000,
+      "totalOverdue": 22000,
+      "trends": {
+        "paid": "+12%",
+        "unpaid": "-3%",
+        "overdue": "+5%"
+      }
+    },
+    "monthlyRevenue": [
+      {
+        "month": "Jan",
+        "paid": 9000,
+        "unpaid": 3000,
+        "overdue": 1000
+      },
+      {
+        "month": "Feb",
+        "paid": 11000,
+        "unpaid": 4000,
+        "overdue": 2000
+      },
+      {
+        "month": "Mar",
+        "paid": 13000,
+        "unpaid": 3500,
+        "overdue": 1500
+      }
+    ],
+    "customerSegments": [
+      {
+        "label": "Enterprise",
+        "value": 50
+      },
+      {
+        "label": "Small Business",
+        "value": 30
+      },
+      {
+        "label": "Public Sector",
+        "value": 20
+      }
+    ]
+  },
+  "activityLogs": [
+    {
+      "id": "log_001",
+      "timestamp": "2026-05-04T09:00:00Z",
+      "userId": "u101",
+      "action": "UPDATE_STATUS",
+      "entity": "Invoice",
+      "entityId": "INV-001",
+      "details": "Status updated to Paid"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

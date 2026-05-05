@@ -1,0 +1,104 @@
+<div class="page-shell">
+  <h1 class="mat-headline-medium">{{ auth.role() === 'Customer' ? 'My purchases' : 'Invoices' }}</h1>
+  <p class="mat-body-medium muted">Search, sort, and open invoice details.</p>
+
+  <div class="toolbar">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Status</mat-label>
+      <mat-select [value]="store.listStatusFilter()" (selectionChange)="onStatusChange($event.value)">
+        @for (status of statuses; track status) {
+          <mat-option [value]="status">{{ status }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Rows per page</mat-label>
+      <mat-select [value]="store.listPageSize()" (selectionChange)="onPageSizeChange($event.value)">
+        @for (n of pageSizeOptions; track n) {
+          <mat-option [value]="n">{{ n }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (auth.canCreateOrEditInvoices()) {
+      <button mat-flat-button color="primary" type="button" (click)="createInvoice()">New invoice</button>
+    }
+  </div>
+
+  @if (store.isLoading()) {
+    <mat-progress-bar mode="indeterminate" />
+  } @else if (store.totalInvoices() === 0) {
+    <mat-card>
+      <mat-card-content class="empty-card">
+        <p>No invoices match the current filters for your role.</p>
+        @if (auth.canCreateOrEditInvoices()) {
+          <button mat-flat-button color="primary" type="button" (click)="createInvoice()">Create invoice</button>
+        }
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="table-scroll mat-elevation-z2">
+      <table mat-table [dataSource]="store.pagedInvoices()">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let row" class="mono">{{ row.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>
+            <button mat-button type="button" class="sort-btn" (click)="onSort('date')">Date {{ sortIndicator('date') }}</button>
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.date | date }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>
+            <button mat-button type="button" class="sort-btn" (click)="onSort('dueDate')">Due {{ sortIndicator('dueDate') }}</button>
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.dueDate | date }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="customer">
+          <th mat-header-cell *matHeaderCellDef>Customer</th>
+          <td mat-cell *matCellDef="let row">{{ row.customerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>
+            <button mat-button type="button" class="sort-btn" (click)="onSort('grandTotal')">Amount {{ sortIndicator('grandTotal') }}</button>
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.grandTotal | currency: row.currency }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let row">
+            <mat-chip-set aria-label="Status">
+              <mat-chip [color]="statusTone(row.status)" highlighted>{{ row.status }}</mat-chip>
+            </mat-chip-set>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-button color="primary" type="button" (click)="openDetail(row.id)">View</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="store.totalInvoices()"
+      [pageSize]="store.listPageSize()"
+      [pageIndex]="store.listPageIndex()"
+      [pageSizeOptions]="pageSizeOptions"
+      [showFirstLastButtons]="true"
+      (page)="onPage($event)"
+    />
+  }
+</div>
